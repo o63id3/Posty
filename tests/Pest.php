@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\Eloquent\Model;
 use Tests\TestCase;
 
 /*
@@ -15,6 +17,8 @@ use Tests\TestCase;
 */
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+uses(TestCase::class, RefreshDatabase::class)->in('Http');
+uses(TestCase::class, RefreshDatabase::class)->in('Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +31,9 @@ uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
+expect()->intercept('toBe', Model::class, function ($value) {
+    expect($this->value->is($value))
+        ->toBeTrue();
 });
 
 /*
@@ -42,7 +47,19 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function login($user = null)
 {
-    // ..
+    return test()
+        ->actingAs($user ?? User::factory()->create())
+        ->withHeaders([
+            'accept' => 'application/json',
+        ]);
+}
+
+function guest()
+{
+    return test()
+        ->withHeaders([
+            'accept' => 'application/json',
+        ]);
 }
