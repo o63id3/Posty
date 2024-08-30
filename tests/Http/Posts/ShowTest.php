@@ -16,6 +16,7 @@ it('can load single post', function () {
             'data' => [
                 'id' => $post->id,
                 'body' => $post->body,
+                'likesCount' => $post->likes()->count(),
                 'createdAt' => $post->created_at,
                 'updatedAt' => $post->updated_at,
                 'user' => [

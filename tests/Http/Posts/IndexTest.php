@@ -18,6 +18,7 @@ it('can load the posts index', function () {
                 '*' => [
                     'id',
                     'body',
+                    'likesCount',
                     'createdAt',
                     'updatedAt',
                     'user',
