@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Post;
 
 it('can load single post', function () {
@@ -11,20 +13,20 @@ it('can load single post', function () {
         ->get(route('posts.show', $post->id))
         ->assertOk()
         ->assertExactJson([
-        'data' => [
-            'id' => $post->id,
-            'body' => $post->body,
-            'createdAt' => $post->created_at,
-            'updatedAt' => $post->updated_at,
-            'user' => [
-                'id' => $post->user->id,
-                'fullName' => $post->user->fullName,
-                'firstName' => $post->user->first_name,
-                'lastName' => $post->user->last_name,
-                'username' => $post->user->username,
+            'data' => [
+                'id' => $post->id,
+                'body' => $post->body,
+                'createdAt' => $post->created_at,
+                'updatedAt' => $post->updated_at,
+                'user' => [
+                    'id' => $post->user->id,
+                    'fullName' => $post->user->fullName,
+                    'firstName' => $post->user->first_name,
+                    'lastName' => $post->user->last_name,
+                    'username' => $post->user->username,
+                ],
             ],
-        ],
-    ]);
+        ]);
 });
 
 it('responds with 404', function () {

@@ -1,7 +1,9 @@
 <?php
 
-use App\Models\User;
+declare(strict_types=1);
+
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 it('can create post', function () {
@@ -9,7 +11,7 @@ it('can create post', function () {
     $user = User::factory()->create();
 
     $post = [
-        'body' => 'This is my post body'
+        'body' => 'This is my post body',
     ];
 
     // hit the store route
@@ -39,7 +41,7 @@ it('can create post', function () {
 
 it('expects a valid body', function ($body) {
     $post = [
-        'body' => $body
+        'body' => $body,
     ];
 
     // hit the store route
@@ -74,7 +76,7 @@ it('can store new post on other posts', function () {
     $post = Post::factory()->create();
 
     $postBody = [
-        'body' => 'This is my post body'
+        'body' => 'This is my post body',
     ];
 
     // hit the store route
@@ -92,7 +94,7 @@ it('can store new post on other posts', function () {
                         'firstName',
                         'lastName',
                         'username',
-                    ]
+                    ],
                 ],
                 'body',
                 'createdAt',

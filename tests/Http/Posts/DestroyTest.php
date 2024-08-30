@@ -1,8 +1,9 @@
 <?php
 
-use App\Models\User;
+declare(strict_types=1);
+
 use App\Models\Post;
-use Illuminate\Support\Str;
+use App\Models\User;
 
 it('can delete a post', function () {
     // create post
@@ -14,18 +15,18 @@ it('can delete a post', function () {
         ->delete(route('posts.destroy', $post))
         ->assertOk()
         ->assertJson([
-        'data' => [
-            'id' => $post->id,
-            'body' => $post->body,
-            'user' => [
-                'id' => $user->id,
-                'fullName' => $user->full_name,
-                'firstName' => $user->first_name,
-                'lastName' => $user->last_name,
-                'username' => $user->username,
+            'data' => [
+                'id' => $post->id,
+                'body' => $post->body,
+                'user' => [
+                    'id' => $user->id,
+                    'fullName' => $user->full_name,
+                    'firstName' => $user->first_name,
+                    'lastName' => $user->last_name,
+                    'username' => $user->username,
+                ],
             ],
-        ],
-    ]);
+        ]);
 
     // posts table should be empty
     expect(Post::count())

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+final class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,10 +25,10 @@ class UserResource extends JsonResource
             'createdAt' => $this->whenHas('created_at'),
             'updatedAt' => $this->whenHas('updated_at'),
 
-            'email' => $this->when(auth()->id() === $this->id, fn() => $this->whenHas('email')),
+            'email' => $this->when(auth()->id() === $this->id, fn () => $this->whenHas('email')),
 
-            'postsCount' => $this->whenCounted('posts', fn() => $this->posts_count),
-            'likesCount' => $this->whenCounted('ownPostsLikes', fn() => $this->own_posts_likes),
+            'postsCount' => $this->whenCounted('posts', fn () => $this->posts_count),
+            'likesCount' => $this->whenCounted('ownPostsLikes', fn () => $this->own_posts_likes),
         ];
     }
 }

@@ -1,7 +1,9 @@
 <?php
 
-use App\Models\Post;
+declare(strict_types=1);
+
 use App\Http\Resources\PostResource;
+use App\Models\Post;
 
 test('make', function () {
     $post = Post::factory()->create();

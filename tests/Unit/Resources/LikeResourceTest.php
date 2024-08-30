@@ -1,7 +1,9 @@
 <?php
 
-use App\Models\Like;
+declare(strict_types=1);
+
 use App\Http\Resources\LikeResource;
+use App\Models\Like;
 
 test('make', function () {
     $like = Like::factory()->create();

@@ -1,8 +1,10 @@
 <?php
 
-use App\Models\User;
-use App\Models\Post;
+declare(strict_types=1);
+
 use App\Models\Like;
+use App\Models\Post;
+use App\Models\User;
 
 test('user', function () {
     $user = User::factory()->create();

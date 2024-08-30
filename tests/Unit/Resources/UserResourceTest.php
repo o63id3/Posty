@@ -1,7 +1,9 @@
 <?php
 
-use App\Models\User;
+declare(strict_types=1);
+
 use App\Http\Resources\UserResource;
+use App\Models\User;
 
 test('make', function () {
     $user = User::factory()->create();

@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Post;
 
-use App\Models\Post;
-use App\Models\Like;
 use App\Http\Resources\LikeResource;
-use Illuminate\Http\Request;
+use App\Models\Post;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 
-class PostLikeController
+final class PostLikeController
 {
     /**
      * Display a listing of the resource.
@@ -41,7 +41,7 @@ class PostLikeController
             ->user()
             ->likes()
             ->create([
-                'post_id' => $post->id
+                'post_id' => $post->id,
             ]);
 
         return response()->json(status: 201);

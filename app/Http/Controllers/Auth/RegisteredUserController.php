@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
@@ -10,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
-class RegisteredUserController
+final class RegisteredUserController
 {
     /**
      * Handle an incoming registration request.
@@ -26,7 +28,6 @@ class RegisteredUserController
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,username'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
 
         $user = User::create([
             'first_name' => $request->first_name,

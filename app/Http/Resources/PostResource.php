@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostResource extends JsonResource
+final class PostResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,11 +22,11 @@ class PostResource extends JsonResource
             'createdAt' => $this->whenHas('created_at'),
             'updatedAt' => $this->whenHas('updated_at'),
 
-            'user' => $this->whenLoaded('user', fn() => UserResource::make($this->user)),
+            'user' => $this->whenLoaded('user', fn () => UserResource::make($this->user)),
 
-            'parent' => $this->whenLoaded('parent', fn() => PostResource::make($this->parent)),
+            'parent' => $this->whenLoaded('parent', fn () => PostResource::make($this->parent)),
 
-            'likesCount' => $this->whenCounted('likes', fn() => $this->likes_count),
+            'likesCount' => $this->whenCounted('likes', fn () => $this->likes_count),
         ];
     }
 }

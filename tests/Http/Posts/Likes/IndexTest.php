@@ -1,7 +1,9 @@
 <?php
 
-use App\Models\Post;
+declare(strict_types=1);
+
 use App\Models\Like;
+use App\Models\Post;
 
 it('can load the post likes', function () {
     // create posts

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LikeResource extends JsonResource
+final class LikeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +19,9 @@ class LikeResource extends JsonResource
         return [
             'id' => $this->id,
 
-            'user' => $this->whenLoaded('user', fn() => UserResource::make($this->user)),
+            'user' => $this->whenLoaded('user', fn () => UserResource::make($this->user)),
 
-            'post' => $this->whenLoaded('post', fn() => PostResource::make($this->post)),
+            'post' => $this->whenLoaded('post', fn () => PostResource::make($this->post)),
         ];
     }
 }

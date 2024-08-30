@@ -1,8 +1,10 @@
 <?php
 
-use App\Models\User;
-use App\Models\Post;
+declare(strict_types=1);
+
 use App\Models\Like;
+use App\Models\Post;
+use App\Models\User;
 
 it('can create like', function () {
     // create user and posts
@@ -34,7 +36,7 @@ it('cannot create like for guest', function () {
 });
 
 it('cannot create like for non-existing post', function () {
-   // hit the store route
+    // hit the store route
     login()
         ->post(route('post.likes.store', 100))
         ->assertNotFound();

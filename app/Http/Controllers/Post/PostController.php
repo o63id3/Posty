@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Post;
 
-use App\Traits\Response;
-use App\Models\Post;
 use App\Http\Resources\PostResource;
-use Illuminate\Http\Request;
+use App\Models\Post;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-class PostController
+final class PostController
 {
     /**
      * Display a listing of the resource.

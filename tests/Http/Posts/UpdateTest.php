@@ -1,7 +1,9 @@
 <?php
 
-use App\Models\User;
+declare(strict_types=1);
+
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 test('can update a post', function () {
@@ -10,7 +12,7 @@ test('can update a post', function () {
     $post = Post::factory()->recycle($user)->create();
 
     $updatedPost = [
-        'body' => 'This is my post body'
+        'body' => 'This is my post body',
     ];
 
     // hit the update route
@@ -18,18 +20,18 @@ test('can update a post', function () {
         ->put(route('posts.update', $post), $updatedPost)
         ->assertOk()
         ->assertJson([
-        'data' => [
-            'id' => $post->id,
-            'body' => $updatedPost['body'],
-            'user' => [
-                'id' => $user->id,
-                'fullName' => $user->full_name,
-                'firstName' => $user->first_name,
-                'lastName' => $user->last_name,
-                'username' => $user->username,
+            'data' => [
+                'id' => $post->id,
+                'body' => $updatedPost['body'],
+                'user' => [
+                    'id' => $user->id,
+                    'fullName' => $user->full_name,
+                    'firstName' => $user->first_name,
+                    'lastName' => $user->last_name,
+                    'username' => $user->username,
+                ],
             ],
-        ],
-    ]);
+        ]);
 
     // post should be updated
     expect(Post::first())
@@ -43,7 +45,7 @@ test('expects a valid body', function ($body) {
     $post = Post::factory()->recycle($user)->create();
 
     $updatedPost = [
-        'body' => $body
+        'body' => $body,
     ];
 
     // hit the update route
