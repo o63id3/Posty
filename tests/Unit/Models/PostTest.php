@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Like;
 
 test('user', function () {
     $user = User::factory()->create();
@@ -37,4 +38,12 @@ test('posts', function () {
 
     expect($parent->posts->pluck('parent_id'))
         ->each->toBe($parent->id);
+});
+
+test('likes', function () {
+    $posts = Post::factory(5)->create();
+    Like::factory(30)->recycle($posts)->create();
+
+    expect($posts->first()->likes->pluck('post_id'))
+        ->each->toBe($posts->first()->id);
 });

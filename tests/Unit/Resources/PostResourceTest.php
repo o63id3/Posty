@@ -37,3 +37,14 @@ test('make with loaded parent', function () {
     expect($resource)
         ->toHaveKey('parent');
 });
+
+test('make with counted likes', function () {
+    $post = Post::factory()->hasParent()->create();
+
+    $post->loadCount('likes');
+
+    $resource = PostResource::make($post)->resolve();
+
+    expect($resource)
+        ->toHaveKey('likesCount');
+});

@@ -34,10 +34,10 @@ test('make with authenticated user', function () {
 test('make with loaded data', function () {
     $user = User::factory()->create();
 
-    $user->loadCount('posts');
+    $user->loadCount('ownPostsLikes');
 
     $resource = UserResource::make($user)->resolve();
 
     expect($resource)
-        ->toHaveKey('postsCount', $user->posts()->count());
+        ->toHaveKey('likesCount', $user->posts()->count());
 });

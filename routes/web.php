@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\Post\PostLikeController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
@@ -30,4 +31,21 @@ Route::group(['middleware' => ['auth']], function () {
         '/posts/{post}',
         [PostController::class, 'destroy']
     )->name('posts.destroy');
+});
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get(
+        '/posts/{post}/likes',
+        [PostLikeController::class, 'index']
+    )->name('post.likes.index');
+
+    Route::post(
+        '/posts/{post}/likes',
+        [PostLikeController::class, 'store']
+    )->name('post.likes.store');
+
+    Route::delete(
+        '/posts/{post}/likes',
+        [PostLikeController::class, 'destroy']
+    )->name('post.likes.destroy');
 });
