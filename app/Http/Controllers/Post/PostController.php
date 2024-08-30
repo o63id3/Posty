@@ -34,7 +34,7 @@ class PostController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Post $parent)
     {
         $validated = $request->validate([
             'body' => ['required', 'string', 'min:5', 'max:1000'],
@@ -44,8 +44,14 @@ class PostController
             ->user()
             ->posts()
             ->create([
+                'parent_id' => $parent?->id,
                 'body' => $request->body,
             ]);
+
+        if ($parent) {
+            $parent->load('user');
+            $post->setRelation('parent', $parent);
+        }
 
         $post->setRelation('user', $request->user());
 

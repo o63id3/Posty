@@ -21,3 +21,20 @@ test('is owner', function () {
         ->and($post->isOwner($userB))
         ->toBeFalse();
 });
+
+test('parent', function () {
+    $parent = Post::factory()->create();
+    $post = Post::factory()->hasParent($parent)->create();
+
+    expect($post->parent)
+        ->toBe($parent);
+});
+
+test('posts', function () {
+    $parent = Post::factory()->create();
+    Post::factory(10)->hasParent($parent)->create();
+    Post::factory(10)->create();
+
+    expect($parent->posts->pluck('parent_id'))
+        ->each->toBe($parent->id);
+});

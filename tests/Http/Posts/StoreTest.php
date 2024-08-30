@@ -69,3 +69,45 @@ it('cannot create post for guest', function () {
     expect(Post::count())
         ->toBe(0);
 });
+
+it('can store new post on other posts', function () {
+    $post = Post::factory()->create();
+
+    $postBody = [
+        'body' => 'This is my post body'
+    ];
+
+    // hit the store route
+    $response = login()
+        ->post(route('posts.store', $post), $postBody)
+        ->assertStatus(201)
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'parent' => [
+                    'id',
+                    'user' => [
+                        'id',
+                        'fullName',
+                        'firstName',
+                        'lastName',
+                        'username',
+                    ]
+                ],
+                'body',
+                'createdAt',
+                'updatedAt',
+                'user' => [
+                    'id',
+                    'fullName',
+                    'firstName',
+                    'lastName',
+                    'username',
+                ],
+            ],
+        ]);
+
+    expect(Post::find($response['data']['id']))
+        ->parent_id->toBe($post->id)
+        ->body->toBe($postBody['body']);
+});

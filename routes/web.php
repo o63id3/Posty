@@ -12,7 +12,7 @@ Route::group(['middleware' => ['auth']], function () {
     )->name('posts.index');
 
     Route::post(
-        '/posts',
+        '/posts/{parent?}',
         [PostController::class, 'store']
     )->name('posts.store');
 

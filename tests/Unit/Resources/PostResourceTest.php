@@ -25,3 +25,15 @@ test('make with loaded data', function () {
     expect($resource)
         ->toHaveKey('user');
 });
+
+test('make with loaded parent', function () {
+    $post = Post::factory()->hasParent()->create();
+
+    $post->load('parent:id,user_id');
+    $post->load('parent.user:id,first_name,last_name,username');
+
+    $resource = PostResource::make($post)->resolve();
+
+    expect($resource)
+        ->toHaveKey('parent');
+});

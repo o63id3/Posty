@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Model
 {
@@ -16,6 +17,7 @@ class Post extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'parent_id',
         'body',
     ];
 
@@ -33,5 +35,21 @@ class Post extends Model
     public function isOwner(User $user): bool
     {
         return $this->user_id === $user->id;
+    }
+
+    /**
+     * Get the post's parent.
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class);
+    }
+
+    /**
+     * Get the post's posts.
+     */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
     }
 }
