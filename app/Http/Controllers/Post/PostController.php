@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Post;
 
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -41,8 +42,9 @@ final class PostController
             'body' => ['required', 'string', 'min:5', 'max:1000'],
         ]);
 
-        $post = $request
-            ->user()
+        $user = type($request->user())->as(User::class);
+
+        $post = $user
             ->posts()
             ->create([
                 'parent_id' => $parent?->id,
@@ -54,7 +56,7 @@ final class PostController
             $post->setRelation('parent', $parent);
         }
 
-        $post->setRelation('user', $request->user());
+        $post->setRelation('user', $user);
 
         return response()->json([
             'data' => PostResource::make($post),
@@ -88,7 +90,8 @@ final class PostController
             'body' => $request->body,
         ]);
 
-        $post->setRelation('user', $request->user());
+        $user = type($request->user())->as(User::class);
+        $post->setRelation('user', $user);
 
         return response()->json([
             'data' => PostResource::make($post),
@@ -104,7 +107,8 @@ final class PostController
 
         $post->delete();
 
-        $post->setRelation('user', $request->user());
+        $user = type($request->user())->as(User::class);
+        $post->setRelation('user', $user);
 
         return response()->json([
             'data' => PostResource::make($post),
