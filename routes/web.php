@@ -4,9 +4,17 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\PostLikeController;
+use App\Http\Controllers\User\UserPostController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get(
+        '/users/{user}/posts',
+        [UserPostController::class, 'index']
+    )->name('user.posts.index');
+});
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get(
