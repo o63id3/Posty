@@ -9,6 +9,33 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property int|null $parent_id
+ * @property int $user_id
+ * @property string $body
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Like> $likes
+ * @property-read int|null $likes_count
+ * @property-read Post|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Post> $posts
+ * @property-read int|null $posts_count
+ * @property-read User $user
+ *
+ * @method static \Database\Factories\PostFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Post newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereUserId($value)
+ *
+ * @mixin \Eloquent
+ */
 final class Post extends Model
 {
     use HasFactory;
