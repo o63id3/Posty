@@ -7,6 +7,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -68,6 +69,22 @@ final class User extends Authenticatable
     public function ownPostsLikes(): HasManyThrough
     {
         return $this->hasManyThrough(Like::class, Post::class);
+    }
+
+    /**
+     * Get the user's following list.
+     */
+    public function following(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'followers', 'follower_id', 'user_id');
+    }
+
+    /**
+     * Get the user's following list.
+     */
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'followers', 'user_id', 'follower_id');
     }
 
     /**

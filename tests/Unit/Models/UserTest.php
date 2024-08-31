@@ -35,3 +35,27 @@ test('own posts likes', function () {
                 ->user_id->toBe($user->id);
         });
 });
+
+test('following', function () {
+    $user = User::factory()->create();
+    $target = User::factory()->create();
+
+    $user->following()->attach($target->id);
+
+    expect($user->following()->count())
+        ->toBe(1)
+        ->and($user->following()->first()->id)
+        ->toBe($target->id);
+});
+
+test('follower', function () {
+    $user = User::factory()->create();
+    $target = User::factory()->create();
+
+    $user->following()->attach($target->id);
+
+    expect($target->followers()->count())
+        ->toBe(1)
+        ->and($target->followers()->first()->id)
+        ->toBe($user->id);
+});

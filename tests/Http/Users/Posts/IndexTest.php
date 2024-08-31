@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\User;
 use Illuminate\Support\Collection;
 
-it('can show posts for single user', function () {
+it('can show user\'s followers', function () {
     // setup the world
     $users = User::factory(2)
         ->hasPosts(5)
@@ -47,7 +47,7 @@ it('can show posts for single user', function () {
         ->each->toBe($user->id);
 });
 
-it('cannot show posts for single user for guest', function () {
+it('cannot show user\'s followers for guest', function () {
     // setup the world
     $user = User::factory()
         ->hasPosts(5)
