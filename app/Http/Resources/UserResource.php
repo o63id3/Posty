@@ -29,7 +29,9 @@ final class UserResource extends JsonResource
             'email' => $this->when(auth()->id() === $this->id, fn () => $this->whenHas('email')),
 
             'postsCount' => $this->whenCounted('posts', fn () => $this->posts_count),
-            'likesCount' => $this->whenCounted('ownPostsLikes', fn () => $this->own_posts_likes),
+            'likesCount' => $this->whenCounted('ownPostsLikes', fn () => $this->own_posts_likes_count),
+            'followingCount' => $this->whenCounted('following', fn () => $this->following_count),
+            'followersCount' => $this->whenCounted('followers', fn () => $this->followers_count),
         ];
     }
 }

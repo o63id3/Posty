@@ -6,6 +6,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\PostLikeController;
 use App\Http\Controllers\User\UserAvatarController;
+use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserFollowerController;
 use App\Http\Controllers\User\UserFollowingsController;
 use App\Http\Controllers\User\UserPostController;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 require __DIR__.'/auth.php';
 
 Route::middleware('auth')->post('images', [ImageController::class, 'store'])->name('images.store');
+
+Route::middleware('auth')->get('users/{user}', [UserController::class, 'show'])->name('users.show');
 
 Route::prefix('users/{user}')
     ->name('user.')

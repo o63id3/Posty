@@ -34,7 +34,7 @@ test('make with authenticated user', function () {
         ->not->toHaveKey('email', $user->email);
 });
 
-test('make with loaded data', function () {
+test('make with counted data', function () {
     $user = User::factory()->create();
 
     $user->loadCount('ownPostsLikes');
@@ -43,4 +43,16 @@ test('make with loaded data', function () {
 
     expect($resource)
         ->toHaveKey('likesCount', $user->posts()->count());
+});
+
+test('make with counted following, and followers', function () {
+    $user = User::factory()->create();
+
+    $user->loadCount(['followers', 'following']);
+
+    $resource = UserResource::make($user)->resolve();
+
+    expect($resource)
+        ->toHaveKey('followersCount', $user->followers()->count())
+        ->toHaveKey('followingCount', $user->following()->count());
 });
