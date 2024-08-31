@@ -16,9 +16,7 @@ Route::prefix('users/{user}')
     ->middleware('auth')
     ->group(function () {
         Route::get('/posts', [UserPostController::class, 'index'])->name('posts.index');
-
         Route::get('/followers', [UserFollowerController::class, 'index'])->name('followers.index');
-
         Route::get('/followings', [UserFollowingsController::class, 'index'])->name('following.index');
     });
 
@@ -32,45 +30,29 @@ Route::name('user.')
     });
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get(
-        '/posts',
-        [PostController::class, 'index']
-    )->name('posts.index');
+    Route::get('/posts',[PostController::class, 'index'])->name('posts.index');
 
-    Route::post(
-        '/posts/{parent?}',
-        [PostController::class, 'store']
-    )->name('posts.store');
+    Route::get('/followers', [UserFollowerController::class, 'index'])->name('followers.index');
 
-    Route::get(
-        '/posts/{post}',
-        [PostController::class, 'show']
-    )->name('posts.show');
-
-    Route::put(
-        '/posts/{post}',
-        [PostController::class, 'update']
-    )->name('posts.update');
-
-    Route::delete(
-        '/posts/{post}',
-        [PostController::class, 'destroy']
-    )->name('posts.destroy');
+    Route::get('/followings', [UserFollowingsController::class, 'index'])->name('following.index');
 });
 
-Route::group(['middleware' => ['auth']], function () {
-    Route::get(
-        '/posts/{post}/likes',
-        [PostLikeController::class, 'index']
-    )->name('post.likes.index');
+Route::prefix('posts')
+    ->name('posts.')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/', [PostController::class, 'index'])->name('index');
+        Route::post('/{parent?}', [PostController::class, 'store'])->name('store');
+        Route::get('/{post}', [PostController::class, 'show'])->name('show');
+        Route::put('/{post}', [PostController::class, 'update'])->name('update');
+        Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
+    });
 
-    Route::post(
-        '/posts/{post}/likes',
-        [PostLikeController::class, 'store']
-    )->name('post.likes.store');
-
-    Route::delete(
-        '/posts/{post}/likes',
-        [PostLikeController::class, 'destroy']
-    )->name('post.likes.destroy');
-});
+Route::prefix('posts/{post}/likes')
+    ->name('post.likes.')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/', [PostLikeController::class, 'index'])->name('index');
+        Route::post('/', [PostLikeController::class, 'store'])->name('store');
+        Route::delete('/', [PostLikeController::class, 'destroy'])->name('destroy');
+    });
