@@ -23,4 +23,12 @@ final class UserPolicy
     {
         return $user->id !== $target->id;
     }
+
+    /**
+     * Determine whether the user can delete avatar.
+     */
+    public function deleteAvatar(User $user, User $target): bool
+    {
+        return $user->is($target);
+    }
 }

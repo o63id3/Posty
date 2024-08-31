@@ -2,14 +2,18 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\PostLikeController;
+use App\Http\Controllers\User\UserAvatarController;
 use App\Http\Controllers\User\UserFollowerController;
 use App\Http\Controllers\User\UserFollowingsController;
 use App\Http\Controllers\User\UserPostController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
+
+Route::middleware('auth')->post('images', [ImageController::class, 'store'])->name('images.store');
 
 Route::prefix('users/{user}')
     ->name('user.')
@@ -27,10 +31,13 @@ Route::name('user.')
 
         Route::post('/followers/{target}', [UserFollowerController::class, 'store'])->name('followers.store');
         Route::delete('/followers/{target}', [UserFollowerController::class, 'destroy'])->name('followers.destroy');
+
+        Route::put('/avatar', [UserAvatarController::class, 'update'])->name('avatar.update');
+        Route::delete('/avatar', [UserAvatarController::class, 'destroy'])->name('avatar.destroy');
     });
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/posts',[PostController::class, 'index'])->name('posts.index');
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 
     Route::get('/followers', [UserFollowerController::class, 'index'])->name('followers.index');
 

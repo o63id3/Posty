@@ -25,6 +25,7 @@ it('can load single post', function () {
                     'firstName' => $post->user->first_name,
                     'lastName' => $post->user->last_name,
                     'username' => $post->user->username,
+                    'avatar' => $post->user->avatar_url,
                 ],
             ],
         ]);

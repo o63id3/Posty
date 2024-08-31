@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 final class User extends Authenticatable
 {
@@ -25,8 +26,9 @@ final class User extends Authenticatable
     protected $fillable = [
         'first_name',
         'last_name',
-        'email',
         'username',
+        'email',
+        'avatar',
         'password',
     ];
 
@@ -35,7 +37,7 @@ final class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name', 'avatar_url'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -85,6 +87,22 @@ final class User extends Authenticatable
     public function followers(): BelongsToMany
     {
         return $this->belongsToMany(self::class, 'followers', 'user_id', 'follower_id');
+    }
+
+    /**
+     * Get the user's posts.
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(Image::class);
+    }
+
+    /**
+     * Get the user's avatar URL attribute.
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatar ? Storage::disk('public')->url($this->avatar) : asset('img/default-avatar.png');
     }
 
     /**

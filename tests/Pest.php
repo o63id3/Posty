@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 /*
@@ -56,6 +57,14 @@ function login($user = null)
         ->withHeaders([
             'accept' => 'application/json',
         ]);
+}
+
+function uploadImage($user = null)
+{
+    return login($user)
+        ->post(route('images.store'), [
+            'image' => UploadedFile::fake()->image('test.jpg'),
+        ])['data']['id'];
 }
 
 function guest()

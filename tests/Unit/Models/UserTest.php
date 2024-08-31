@@ -59,3 +59,28 @@ test('follower', function () {
         ->and($target->followers()->first()->id)
         ->toBe($user->id);
 });
+
+test('images', function () {
+    $users = User::factory(2)->hasImages(5)->create();
+
+    $user = $users->random();
+
+    expect($user->images->pluck('user_id'))
+        ->each->toBe($user->id);
+});
+
+test('default avatar url', function () {
+    $user = User::factory()->create();
+
+    expect($user->avatar)->toBeNull()
+        ->and($user->avatar_url)->toBe(asset('img/default-avatar.png'));
+});
+
+test('custom avatar url', function () {
+    $user = User::factory()->create([
+        'avatar' => 'avatars/123.png',
+    ]);
+
+    expect($user->avatar)->toBe('avatars/123.png')
+        ->and($user->avatar_url)->toBe(Storage::disk('public')->url('avatars/123.png'));
+});

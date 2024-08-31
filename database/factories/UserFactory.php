@@ -30,6 +30,7 @@ final class UserFactory extends Factory
             'last_name' => fake()->lastName(),
             'username' => fake()->unique()->username(),
             'email' => fake()->unique()->safeEmail(),
+            'avatar' => null,
             'email_verified_at' => now(),
             'password' => self::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
@@ -43,6 +44,16 @@ final class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the model's avatar should be set.
+     */
+    public function avatar(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'avatar' => '\path\to\the\image.jpg',
         ]);
     }
 }

@@ -69,7 +69,7 @@ final class PostController
      */
     public function show(Post $post)
     {
-        $post->load('user:id,first_name,last_name,username');
+        $post->load('user:id,first_name,last_name,username,avatar');
         $post->loadCount('likes');
 
         return response()->json([

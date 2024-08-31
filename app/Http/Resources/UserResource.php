@@ -22,6 +22,7 @@ final class UserResource extends JsonResource
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
             'username' => $this->username,
+            'avatar' => $this->avatar_url,
             'createdAt' => $this->whenHas('created_at'),
             'updatedAt' => $this->whenHas('updated_at'),
 

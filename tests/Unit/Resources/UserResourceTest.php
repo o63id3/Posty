@@ -15,6 +15,7 @@ test('make', function () {
         ->toHaveKey('fullName', $user->full_name)
         ->toHaveKey('firstName', $user->first_name)
         ->toHaveKey('lastName', $user->last_name)
+        ->toHaveKey('avatar', $user->avatar_url)
         ->toHaveKey('createdAt', $user->created_at)
         ->toHaveKey('updatedAt', $user->updated_at);
 });

@@ -23,3 +23,13 @@ test('unfollow', function () {
         ->and($userA->can('unfollow', $userA))
         ->toBeFalse();
 });
+
+test('delete avatar', function () {
+    $userA = User::factory()->create();
+    $userB = User::factory()->create();
+
+    expect($userA->can('deleteAvatar', $userA))
+        ->toBeTrue()
+        ->and($userA->can('deleteAvatar', $userB))
+        ->toBeFalse();
+});
