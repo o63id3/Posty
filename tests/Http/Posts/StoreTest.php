@@ -7,16 +7,17 @@ use App\Models\User;
 use Illuminate\Support\Str;
 
 it('can create post', function () {
-    // create post
+    // setup the world
     $user = User::factory()->create();
 
-    $post = [
+    // build the request body
+    $requestBody = [
         'body' => 'This is my post body',
     ];
 
     // hit the store route
     login($user)
-        ->post(route('posts.store'), $post)
+        ->post(route('posts.store'), $requestBody)
         ->assertStatus(201)
         ->assertJsonStructure([
             'data' => [
@@ -35,18 +36,19 @@ it('can create post', function () {
         ]);
 
     expect(Post::first())
-        ->body->toBe($post['body'])
-        ->user_id->toBe($user->id);
+        ->body->toBe($requestBody['body'])
+        ->user->toBe($user);
 });
 
 it('expects a valid body', function ($body) {
-    $post = [
+    // build the request body
+    $requestBody = [
         'body' => $body,
     ];
 
     // hit the store route
     login()
-        ->post(route('posts.store', $post))
+        ->post(route('posts.store', $requestBody))
         ->assertStatus(422)
         ->assertJsonValidationErrors(['body']);
 
@@ -67,21 +69,23 @@ it('cannot create post for guest', function () {
         ->assertStatus(401)
         ->assertJsonMissing(['data']);
 
-    // posts table is empty
+    // posts table should be empty
     expect(Post::count())
         ->toBe(0);
 });
 
 it('can store new post on other posts', function () {
+    // setup the world
     $post = Post::factory()->create();
 
-    $postBody = [
+    // build the request body
+    $requestBody = [
         'body' => 'This is my post body',
     ];
 
     // hit the store route
     $response = login()
-        ->post(route('posts.store', $post), $postBody)
+        ->post(route('posts.store', $post), $requestBody)
         ->assertStatus(201)
         ->assertJsonStructure([
             'data' => [
@@ -110,6 +114,6 @@ it('can store new post on other posts', function () {
         ]);
 
     expect(Post::find($response['data']['id']))
-        ->parent_id->toBe($post->id)
-        ->body->toBe($postBody['body']);
+        ->parent->toBe($post)
+        ->body->toBe($requestBody['body']);
 });

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\Post;
 
 it('can load the posts index', function () {
-    // create posts
+    // setup the world
     Post::factory(10)->create();
 
     // hit the index route
@@ -34,7 +34,7 @@ it('can load the posts index', function () {
 });
 
 it('cannot load the posts index for guest', function () {
-    // create posts
+    // setup the world
     Post::factory(10)->create();
 
     // hit the index route

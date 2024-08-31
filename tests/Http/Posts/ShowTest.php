@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\Post;
 
 it('can load single post', function () {
-    // create post
+    // setup the world
     $post = Post::factory()->create();
 
     // hit the show route
@@ -39,9 +39,12 @@ it('responds with 404', function () {
 });
 
 it('cannot load the posts index for guest', function () {
+    // setup the world
+    $post = Post::factory()->create();
+
     // hit the show route
     $response = guest()
-        ->get(route('posts.show', Post::factory()->create()))
+        ->get(route('posts.show', $post))
         ->assertStatus(401)
         ->assertJsonMissing(['data']);
 });

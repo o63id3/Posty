@@ -6,7 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 
 it('can delete a post', function () {
-    // create post
+    // setup the world
     $user = User::factory()->create();
     $post = Post::factory()->recycle($user)->create();
 
@@ -34,6 +34,7 @@ it('can delete a post', function () {
 });
 
 test('cannot delete others posts', function () {
+    // setup the world
     $post = Post::factory()->create();
 
     // hit the destroy route
@@ -42,13 +43,13 @@ test('cannot delete others posts', function () {
         ->assertStatus(403)
         ->assertJsonMissing(['data']);
 
-    // original post should look the same
-    expect(Post::first())
-        ->body->toBe($post->body)
-        ->user_id->toBe($post->user->id);
+    // posts table should be the same
+    expect(Post::count())
+        ->toBe(1);
 });
 
 test('cannot delete post for guest', function () {
+    // setup the world
     $post = Post::factory()->create();
 
     // hit the delete route

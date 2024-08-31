@@ -7,7 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 
 it('can create like', function () {
-    // create user and posts
+    // setup the world
     $user = User::factory()->create();
     $post = Post::factory(5)->create()->random();
 
@@ -17,12 +17,12 @@ it('can create like', function () {
         ->assertStatus(201);
 
     expect(Like::first())
-        ->user_id->toBe($user->id)
-        ->post_id->toBe($post->id);
+        ->user->toBe($user)
+        ->post->toBe($post);
 });
 
 it('cannot create like for guest', function () {
-    // create posts
+    // setup the world
     $post = Post::factory(5)->create()->random();
 
     // hit the store route

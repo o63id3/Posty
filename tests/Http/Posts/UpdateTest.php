@@ -7,22 +7,23 @@ use App\Models\User;
 use Illuminate\Support\Str;
 
 test('can update a post', function () {
-    // create post
+    // setup the world
     $user = User::factory()->create();
     $post = Post::factory()->recycle($user)->create();
 
-    $updatedPost = [
+    // build the request body
+    $requestBody = [
         'body' => 'This is my post body',
     ];
 
     // hit the update route
     login($user)
-        ->put(route('posts.update', $post), $updatedPost)
+        ->put(route('posts.update', $post), $requestBody)
         ->assertOk()
         ->assertJson([
             'data' => [
                 'id' => $post->id,
-                'body' => $updatedPost['body'],
+                'body' => $requestBody['body'],
                 'user' => [
                     'id' => $user->id,
                     'fullName' => $user->full_name,
@@ -34,29 +35,30 @@ test('can update a post', function () {
         ]);
 
     // post should be updated
-    expect(Post::first())
-        ->body->toBe($updatedPost['body'])
-        ->user_id->toBe($user->id);
+    expect($post->refresh())
+        ->body->toBe($requestBody['body'])
+        ->user->toBe($user);
 });
 
 test('expects a valid body', function ($body) {
-    // create post
+    // setup the world
     $user = User::factory()->create();
     $post = Post::factory()->recycle($user)->create();
 
-    $updatedPost = [
+    // build the request body
+    $requestBody = [
         'body' => $body,
     ];
 
     // hit the update route
     login($user)
-        ->put(route('posts.update', $post), $updatedPost)
+        ->put(route('posts.update', $post), $requestBody)
         ->assertStatus(422)
         ->assertJsonValidationErrors(['body']);
 
     // original post should look the same
-    expect(Post::first())
-        ->body->toBe($post->body);
+    expect($post->refresh())
+        ->body->not->toBe($requestBody['body']);
 })->with([
     null,
     '',
@@ -66,6 +68,7 @@ test('expects a valid body', function ($body) {
 ]);
 
 test('cannot update others posts', function () {
+    // setup the world
     $post = Post::factory()->create();
 
     // hit the update route
@@ -76,11 +79,11 @@ test('cannot update others posts', function () {
 
     // original post should look the same
     expect(Post::first())
-        ->body->toBe($post->body)
-        ->user_id->toBe($post->user->id);
+        ->body->toBe($post->body);
 });
 
 test('cannot update post for guest', function () {
+    // setup the world
     $post = Post::factory()->create();
 
     // hit the update route

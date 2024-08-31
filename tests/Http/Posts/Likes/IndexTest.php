@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Models\Like;
 use App\Models\Post;
 
 it('can load the post likes', function () {
-    // create posts
-    $post = Post::factory()->create();
-    $likes = Like::factory(5)->recycle($post)->create();
+    // setup the world
+    $post = Post::factory()->hasLikes(5)->create();
 
     // hit the index route
-    $res = login()
+    login()
         ->get(route('post.likes.index', $post))
         ->assertOk()
         ->assertJsonCount(5, 'data')
@@ -38,12 +36,12 @@ it('can load the post likes', function () {
 });
 
 it('cannot load the post likes guest', function () {
-    // create likes
-    Like::factory(10)->create();
+    // setup the world
+    $post = Post::factory()->hasLikes(5)->create();
 
     // hit the index route
     guest()
-        ->get(route('post.likes.index', 1))
+        ->get(route('post.likes.index', $post))
         ->assertStatus(401)
         ->assertJsonMissing(['data']);
 });
