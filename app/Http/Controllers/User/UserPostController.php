@@ -17,6 +17,7 @@ final class UserPostController
     {
         $posts = $user
             ->posts()
+            ->with(['user', 'images', 'parent:id,user_id', 'parent.user:id,first_name,last_name,username,avatar'])
             ->withCount('likes')
             ->cursorPaginate();
 

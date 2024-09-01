@@ -26,10 +26,18 @@ it('can show user\'s posts', function () {
                     'likesCount',
                     'createdAt',
                     'updatedAt',
-                    'user' => [
-                        'id',
-                        'fullName',
-                        'username',
+                    'user',
+                    'images' => [
+                        '*' => [
+                            'id',
+                            'url',
+                        ],
+                    ],
+                    'parent' => [
+                        'user' => [
+                            'id',
+                            'username',
+                        ],
                     ],
                 ],
             ],

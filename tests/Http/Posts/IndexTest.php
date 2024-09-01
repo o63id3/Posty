@@ -22,6 +22,18 @@ it('can load the posts index', function () {
                     'createdAt',
                     'updatedAt',
                     'user',
+                    'images' => [
+                        '*' => [
+                            'id',
+                            'url',
+                        ],
+                    ],
+                    'parent' => [
+                        'user' => [
+                            'id',
+                            'username',
+                        ],
+                    ],
                 ],
             ],
             'meta' => [

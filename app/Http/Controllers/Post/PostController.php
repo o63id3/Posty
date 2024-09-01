@@ -21,7 +21,7 @@ final class PostController
     public function index(): JsonResponse
     {
         $posts = Post::query()
-            ->with('user')
+            ->with(['user', 'images', 'parent:id,user_id', 'parent.user:id,first_name,last_name,username,avatar'])
             ->withCount('likes')
             ->cursorPaginate();
 
@@ -60,7 +60,7 @@ final class PostController
      */
     public function show(Post $post)
     {
-        $post->load('user:id,first_name,last_name,username,avatar');
+        $post->load(['user:id,first_name,last_name,username,avatar', 'images', 'parent:id,user_id', 'parent.user:id,first_name,last_name,username,avatar']);
         $post->loadCount('likes');
 
         return response()->json([
