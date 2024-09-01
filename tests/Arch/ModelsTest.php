@@ -9,6 +9,7 @@ arch('models')
     ->toExtend('Illuminate\Database\Eloquent\Model')
     ->ignoring('App\Models\Concerns')
     ->toOnlyBeUsedIn([
+        'App\Actions',
         'App\Concerns',
         'App\Console',
         'App\EventActions',

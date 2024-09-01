@@ -8,7 +8,6 @@ use App\Http\Resources\PostImageResource;
 use App\Models\Image;
 use App\Models\Post;
 use App\Models\PostImage;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -25,26 +24,16 @@ final class PostImageController
 
         $validated = $request->validate([
             'images' => ['required', 'array'],
-            'images.*' => Rule::forEach(function (?string $value, string $attribute) {
-                return [
-                    Rule::exists('images', 'id')->where(function (Builder $query) {
-                        return $query->where('user_id', auth()->id());
-                    }),
-                ];
-            }),
+            'images.*' => Rule::forEach(fn () => Rule::exists('images', 'id')->where('user_id', auth()->id())),
         ]);
 
-        $images = Image::whereIn('id', $validated['images'])->get();
+        $images = Image::whereIn('id', $validated['images'])->get(['path', 'size']);
 
-        $postImages = [];
-        foreach ($images as $image) {
-            $postImages[] = $post
-                ->images()
-                ->create([
-                    'path' => $image->path,
-                    'size' => $image->size,
-                ]);
-        }
+        $postImages = $post
+            ->images()
+            ->createMany($images->toArray());
+
+        $images = Image::whereIn('id', $validated['images'])->delete();
 
         return response()->json([
             'data' => PostImageResource::collection($postImages),

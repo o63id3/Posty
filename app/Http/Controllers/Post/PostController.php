@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Post;
 
+use App\Actions\NewPost;
 use App\Http\Resources\PostResource;
-use App\Models\Image;
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -45,46 +44,11 @@ final class PostController
         $validated = $request->validate([
             'body' => ['required', 'string', 'min:5', 'max:1000'],
             'images' => ['array'],
-            'images.*' => Rule::forEach(function (?string $value, string $attribute) {
-                return [
-                    Rule::exists('images', 'id')->where(function (Builder $query) {
-                        return $query->where('user_id', auth()->id());
-                    }),
-                ];
-            }),
+            'images.*' => Rule::forEach(fn () => Rule::exists('images', 'id')->where('user_id', auth()->id())),
         ]);
 
         $user = type($request->user())->as(User::class);
-
-        $post = $user
-            ->posts()
-            ->create([
-                'parent_id' => $parent?->id,
-                'body' => $request->body,
-            ]);
-
-        if (array_key_exists('images', $validated)) {
-            $images = Image::whereIn('id', $request->images)->get();
-
-            foreach ($images as $image) {
-                $postImages[] = $post
-                    ->images()
-                    ->create([
-                        'path' => $image->path,
-                        'size' => $image->size,
-                    ]);
-            }
-
-            $post->setRelation('images', $postImages);
-
-        }
-
-        if ($parent) {
-            $parent->load('user');
-            $post->setRelation('parent', $parent);
-        }
-
-        $post->setRelation('user', $user);
+        $post = (new NewPost($user, $validated, $parent))->handle();
 
         return response()->json([
             'data' => PostResource::make($post),
