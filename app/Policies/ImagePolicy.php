@@ -16,4 +16,12 @@ final class ImagePolicy
     {
         return $user->id === $image->user_id;
     }
+
+    /**
+     * Determine whether the user can add the model to his post.
+     */
+    public function addToPost(User $user, Image $image): bool
+    {
+        return $user->id === $image->user_id;
+    }
 }

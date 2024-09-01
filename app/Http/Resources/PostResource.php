@@ -22,6 +22,8 @@ final class PostResource extends JsonResource
             'createdAt' => $this->whenHas('created_at'),
             'updatedAt' => $this->whenHas('updated_at'),
 
+            'images' => $this->whenLoaded('images', fn () => PostImageResource::collection($this->images)),
+
             'user' => $this->whenLoaded('user', fn () => UserResource::make($this->user)),
 
             'parent' => $this->whenLoaded('parent', fn () => PostResource::make($this->parent)),

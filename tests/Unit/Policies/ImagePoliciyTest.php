@@ -15,3 +15,14 @@ test('set as avatar', function () {
         ->and($userB->can('setAsAvatar', $image))
         ->toBeFalse();
 });
+
+test('add to post', function () {
+    $userA = User::factory()->create();
+    $userB = User::factory()->create();
+    $image = Image::factory()->recycle($userA)->create();
+
+    expect($userA->can('addToPost', $image))
+        ->toBeTrue()
+        ->and($userB->can('addToPost', $image))
+        ->toBeFalse();
+});

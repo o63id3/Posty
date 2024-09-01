@@ -49,3 +49,11 @@ test('likes', function () {
     expect($posts->first()->likes->pluck('post_id'))
         ->each->toBe($posts->first()->id);
 });
+
+test('images', function () {
+    $posts = Post::factory(2)->hasImages(2)->create();
+
+    $post = $posts->random();
+    expect($post->images->pluck('post_id'))
+        ->each->toBe($post->id);
+});

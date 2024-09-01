@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\Post\PostImageController;
 use App\Http\Controllers\Post\PostLikeController;
 use App\Http\Controllers\User\UserAvatarController;
 use App\Http\Controllers\User\UserController;
@@ -65,4 +66,12 @@ Route::prefix('posts/{post}/likes')
         Route::get('/', [PostLikeController::class, 'index'])->name('index');
         Route::post('/', [PostLikeController::class, 'store'])->name('store');
         Route::delete('/', [PostLikeController::class, 'destroy'])->name('destroy');
+    });
+
+Route::prefix('posts/{post}/images')
+    ->name('post.images.')
+    ->middleware('auth')
+    ->group(function () {
+        Route::post('/', [PostImageController::class, 'store'])->name('store');
+        Route::delete('/{image}', [PostImageController::class, 'destroy'])->name('destroy');
     });

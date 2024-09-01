@@ -34,6 +34,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereUserId($value)
  *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PostImage> $images
+ * @property-read int|null $images_count
+ *
  * @mixin \Eloquent
  */
 final class Post extends Model
@@ -88,5 +91,13 @@ final class Post extends Model
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
+    }
+
+    /**
+     * Get the post's images.
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(PostImage::class);
     }
 }

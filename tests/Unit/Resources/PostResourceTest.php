@@ -50,3 +50,14 @@ test('make with counted likes', function () {
     expect($resource)
         ->toHaveKey('likesCount');
 });
+
+test('make with loaded images', function () {
+    $post = Post::factory()->hasImages(2)->create();
+
+    $post->load('images');
+
+    $resource = PostResource::make($post)->resolve();
+
+    expect($resource)
+        ->toHaveKey('images');
+});

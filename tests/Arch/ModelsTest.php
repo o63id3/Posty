@@ -30,7 +30,7 @@ arch('models')
     ])->ignoring('App\Models\Concerns');
 
 arch('ensure factories', function () {
-    expect($models = getModels())->toHaveCount(4);
+    expect($models = getModels())->toHaveCount(5);
 
     foreach ($models as $model) {
         /* @var \Illuminate\Database\Eloquent\Factories\HasFactory $model */

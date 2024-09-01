@@ -40,6 +40,78 @@ it('can create post', function () {
         ->user->toBe($user);
 });
 
+it('can create post with images', function () {
+    // setup the world
+    $user = User::factory()->create();
+
+    // upload images
+    $image1Id = uploadImage($user);
+    $image2Id = uploadImage($user);
+
+    // build the request body
+    $requestBody = [
+        'body' => 'This is my post body',
+        'images' => [
+            $image1Id,
+            $image2Id,
+        ],
+    ];
+
+    // hit the store route
+    login($user)
+        ->post(route('posts.store'), $requestBody)
+        ->assertStatus(201)
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'body',
+                'images' => [
+                    '*' => [
+                        'id',
+                        'url',
+                    ],
+                ],
+                'createdAt',
+                'updatedAt',
+                'user' => [
+                    'id',
+                    'fullName',
+                    'firstName',
+                    'lastName',
+                    'username',
+                ],
+            ],
+        ]);
+
+    expect($post = Post::first())
+        ->body->toBe($requestBody['body'])
+        ->user->toBe($user)
+        ->and($post->images()->count())
+        ->toBe(2);
+});
+
+it('expects images to belong to the user', function () {
+    // upload images
+    $imageId = uploadImage();
+
+    // build the request body
+    $requestBody = [
+        'body' => 'This is my post body',
+        'images' => [
+            $imageId,
+        ],
+    ];
+
+    // hit the store route
+    login()
+        ->post(route('posts.store'), $requestBody)
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['images.0']);
+
+    expect(Post::count())
+        ->toBe(0);
+});
+
 it('expects a valid body', function ($body) {
     // build the request body
     $requestBody = [

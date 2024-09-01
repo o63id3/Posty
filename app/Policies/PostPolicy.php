@@ -50,6 +50,22 @@ final class PostPolicy
     }
 
     /**
+     * Determine whether the user can delete the model's images.
+     */
+    public function addImages(User $user, Post $post): bool
+    {
+        return $post->isOwner($user);
+    }
+
+    /**
+     * Determine whether the user can delete the model's images.
+     */
+    public function deleteImages(User $user, Post $post): bool
+    {
+        return $this->addImages($user, $post);
+    }
+
+    /**
      * Determine whether the user can restore the model.
      */
     public function restore(User $user, Post $post): bool
