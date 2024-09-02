@@ -11,6 +11,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserFollowerController;
 use App\Http\Controllers\User\UserFollowingsController;
 use App\Http\Controllers\User\UserPostController;
+use App\Http\Controllers\User\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
@@ -38,6 +39,8 @@ Route::name('user.')
 
         Route::put('/avatar', [UserAvatarController::class, 'update'])->name('avatar.update');
         Route::delete('/avatar', [UserAvatarController::class, 'destroy'])->name('avatar.destroy');
+
+        Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
     });
 
 Route::group(['middleware' => ['auth']], function () {

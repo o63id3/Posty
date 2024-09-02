@@ -24,7 +24,7 @@ it('can delete following', function () {
         ->each->not->toBe($target->id);
 });
 
-test('cannot delete following for guest', function () {
+it('cannot delete following for guest', function () {
     // setup the world
     $user = User::factory()
         ->hasFollowing(5)

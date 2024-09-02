@@ -33,7 +33,7 @@ it('can delete a post', function () {
         ->toBe(0);
 });
 
-test('cannot delete others posts', function () {
+it('cannot delete others posts', function () {
     // setup the world
     $post = Post::factory()->create();
 
@@ -48,7 +48,7 @@ test('cannot delete others posts', function () {
         ->toBe(1);
 });
 
-test('cannot delete post for guest', function () {
+it('cannot delete post for guest', function () {
     // setup the world
     $post = Post::factory()->create();
 

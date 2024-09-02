@@ -6,7 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Str;
 
-test('can update a post', function () {
+it('can update a post', function () {
     // setup the world
     $user = User::factory()->create();
     $post = Post::factory()->recycle($user)->create();
@@ -40,7 +40,7 @@ test('can update a post', function () {
         ->user->toBe($user);
 });
 
-test('expects a valid body', function ($body) {
+it('expects a valid body', function ($body) {
     // setup the world
     $user = User::factory()->create();
     $post = Post::factory()->recycle($user)->create();
@@ -67,7 +67,7 @@ test('expects a valid body', function ($body) {
     Str::random(1001),
 ]);
 
-test('cannot update others posts', function () {
+it('cannot update others posts', function () {
     // setup the world
     $post = Post::factory()->create();
 
@@ -82,7 +82,7 @@ test('cannot update others posts', function () {
         ->body->toBe($post->body);
 });
 
-test('cannot update post for guest', function () {
+it('cannot update post for guest', function () {
     // setup the world
     $post = Post::factory()->create();
 
