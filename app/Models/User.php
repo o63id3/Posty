@@ -82,7 +82,10 @@ final class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = ['full_name', 'avatar_url'];
+    protected $appends = [
+        'full_name',
+        'avatar_url',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -164,7 +167,7 @@ final class User extends Authenticatable
     }
 
     /**
-     * Determine if the user is an administrator.
+     * Get the user full name.
      */
     protected function fullName(): Attribute
     {

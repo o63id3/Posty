@@ -47,7 +47,7 @@ it('can create post with image', function () {
         'body' => 'This is post body!',
         'images' => [
             $imageId,
-        ]
+        ],
     ];
     $parent = Post::factory()->create();
 
