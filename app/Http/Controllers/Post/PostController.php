@@ -22,7 +22,7 @@ final class PostController
     {
         $posts = Post::query()
             ->with(['user', 'images', 'parent:id,user_id', 'parent.user:id,first_name,last_name,username,avatar'])
-            ->withCount('likes')
+            ->withCount(['likes', 'posts'])
             ->cursorPaginate();
 
         return response()->json([
@@ -61,7 +61,7 @@ final class PostController
     public function show(Post $post)
     {
         $post->load(['user:id,first_name,last_name,username,avatar', 'images', 'parent:id,user_id', 'parent.user:id,first_name,last_name,username,avatar']);
-        $post->loadCount('likes');
+        $post->loadCount(['likes', 'posts']);
 
         return response()->json([
             'data' => PostResource::make($post),

@@ -19,6 +19,7 @@ it('can show basic user info', function () {
                 'lastName' => $user->last_name,
                 'username' => $user->username,
                 'avatar' => $user->avatar_url,
+                'isFollowing' => false,
                 'createdAt' => $user->created_at,
                 'updatedAt' => $user->updated_at,
 

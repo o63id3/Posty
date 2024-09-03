@@ -17,6 +17,8 @@ it('can load single post', function () {
                 'id' => $post->id,
                 'body' => $post->body,
                 'likesCount' => $post->likes()->count(),
+                'postsCount' => $post->posts()->count(),
+                'isLiked' => false,
                 'createdAt' => $post->created_at,
                 'updatedAt' => $post->updated_at,
                 'user' => [
@@ -26,6 +28,7 @@ it('can load single post', function () {
                     'lastName' => $post->user->last_name,
                     'username' => $post->user->username,
                     'avatar' => $post->user->avatar_url,
+                    'isFollowing' => false,
                 ],
                 'parent' => null,
                 'images.0' => [
@@ -50,6 +53,8 @@ it('can load single post with parent', function () {
                 'id' => $post->id,
                 'body' => $post->body,
                 'likesCount' => $post->likes()->count(),
+                'postsCount' => $post->posts()->count(),
+                'isLiked' => false,
                 'createdAt' => $post->created_at,
                 'updatedAt' => $post->updated_at,
                 'user' => [
@@ -59,9 +64,11 @@ it('can load single post with parent', function () {
                     'lastName' => $post->user->last_name,
                     'username' => $post->user->username,
                     'avatar' => $post->user->avatar_url,
+                    'isFollowing' => false,
                 ],
                 'parent' => [
                     'id' => $parent->id,
+                    'isLiked' => false,
                     'user' => [
                         'id' => $parent->user->id,
                         'fullName' => $parent->user->fullName,
@@ -69,6 +76,7 @@ it('can load single post with parent', function () {
                         'lastName' => $parent->user->last_name,
                         'username' => $parent->user->username,
                         'avatar' => $parent->user->avatar_url,
+                        'isFollowing' => false,
                     ],
                 ],
                 'images' => [],

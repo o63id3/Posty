@@ -50,6 +50,21 @@ test('likes', function () {
         ->each->toBe($posts->first()->id);
 });
 
+test('is liked', function () {
+    $user = User::factory()->create();
+    $post = Post::factory()->create();
+
+    expect($post->isLiked($user))
+        ->toBeFalse();
+
+    $post = Post::factory()
+        ->hasLikes(1, ['user_id' => $user])
+        ->create();
+
+    expect($post->isLiked($user))
+        ->toBeTrue();
+});
+
 test('images', function () {
     $posts = Post::factory(2)->hasImages(2)->create();
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -16,12 +17,15 @@ final class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::factory(10)->create();
-        $posts = Post::factory(20)->recycle($users)->create();
+        $users = User::factory(10)
+            ->hasFollowers(3)
+            ->hasFollowing(1)
+            ->create();
+        $posts = Post::factory(100)
+            ->hasPosts(3)
+            ->recycle($users)
+            ->create();
 
-        // User::factory()->create([
-        // 'name' => 'Test User',
-        // 'email' => 'test@example.com',
-        // ]);
+        Like::factory(130)->recycle($users)->recycle($posts)->create();
     }
 }

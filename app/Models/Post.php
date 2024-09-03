@@ -94,6 +94,14 @@ final class Post extends Model
     }
 
     /**
+     * Get the post's likes.
+     */
+    public function isLiked(User $user): bool
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    /**
      * Get the post's images.
      */
     public function images(): HasMany

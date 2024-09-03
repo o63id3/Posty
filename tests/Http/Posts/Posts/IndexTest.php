@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 use App\Models\Post;
 
-it('can load the posts index', function () {
+it('can load the post posts index', function () {
     // setup the world
-    Post::factory(10)->create();
+    $post = Post::factory()
+        ->hasPosts(5)
+        ->create();
 
     // hit the index route
     login()
-        ->get(route('posts.index'))
+        ->get(route('post.posts.index', $post))
         ->assertOk()
-        ->assertJsonCount(10, 'data')
+        ->assertJsonCount(5, 'data')
         ->assertJsonStructure([
             'data' => [
                 '*' => [
@@ -49,11 +51,13 @@ it('can load the posts index', function () {
 
 it('cannot load the posts index for guest', function () {
     // setup the world
-    Post::factory(10)->create();
+    $post = Post::factory()
+        ->hasPosts(5)
+        ->create();
 
     // hit the index route
     guest()
-        ->get(route('posts.index'))
+        ->get(route('post.posts.index', $post))
         ->assertStatus(401)
         ->assertJsonMissing(['data']);
 });

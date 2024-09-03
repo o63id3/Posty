@@ -23,6 +23,7 @@ final class UserResource extends JsonResource
             'lastName' => $this->last_name,
             'username' => $this->username,
             'avatar' => $this->avatar_url,
+            'isFollowing' => $this->when(auth()->check(), fn () => $this->followers()->where('users.id', auth()->id())->exists()),
             'createdAt' => $this->whenHas('created_at'),
             'updatedAt' => $this->whenHas('updated_at'),
 

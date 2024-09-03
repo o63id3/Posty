@@ -61,3 +61,25 @@ test('make with loaded images', function () {
     expect($resource)
         ->toHaveKey('images');
 });
+
+test('make with counted posts', function () {
+    $post = Post::factory()->hasParent()->create();
+
+    $post->loadCount('posts');
+
+    $resource = PostResource::make($post)->resolve();
+
+    expect($resource)
+        ->toHaveKey('postsCount');
+});
+
+test('make with is liked', function () {
+    $post = Post::factory()->create();
+
+    login();
+
+    $resource = PostResource::make($post)->resolve();
+
+    expect($resource)
+        ->toHaveKey('isLiked', false);
+});

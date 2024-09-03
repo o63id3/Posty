@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\Post\PostCommentController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\PostImageController;
 use App\Http\Controllers\Post\PostLikeController;
@@ -18,9 +19,9 @@ require __DIR__.'/auth.php';
 
 Route::middleware('auth')->post('images', [ImageController::class, 'store'])->name('images.store');
 
-Route::middleware('auth')->get('users/{user}', [UserController::class, 'show'])->name('users.show');
+Route::middleware('auth')->get('users/{user:username}', [UserController::class, 'show'])->name('users.show');
 
-Route::prefix('users/{user}')
+Route::prefix('users/{user:username}')
     ->name('user.')
     ->middleware('auth')
     ->group(function () {
@@ -69,6 +70,13 @@ Route::prefix('posts/{post}/likes')
         Route::get('/', [PostLikeController::class, 'index'])->name('index');
         Route::post('/', [PostLikeController::class, 'store'])->name('store');
         Route::delete('/', [PostLikeController::class, 'destroy'])->name('destroy');
+    });
+
+Route::prefix('posts/{post}/posts')
+    ->name('post.posts.')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/', [PostCommentController::class, 'index'])->name('index');
     });
 
 Route::prefix('posts/{post}/images')

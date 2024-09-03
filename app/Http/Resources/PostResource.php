@@ -21,6 +21,7 @@ final class PostResource extends JsonResource
             'body' => $this->whenHas('body'),
             'createdAt' => $this->whenHas('created_at'),
             'updatedAt' => $this->whenHas('updated_at'),
+            'isLiked' => $this->when(auth()->check(), fn () => $this->isLiked(auth()->user())),
 
             'images' => $this->whenLoaded('images', fn () => PostImageResource::collection($this->images)),
 
@@ -29,6 +30,8 @@ final class PostResource extends JsonResource
             'parent' => $this->whenLoaded('parent', fn () => PostResource::make($this->parent)),
 
             'likesCount' => $this->whenCounted('likes', fn () => $this->likes_count),
+
+            'postsCount' => $this->whenCounted('posts', fn () => $this->posts_count),
         ];
     }
 }
