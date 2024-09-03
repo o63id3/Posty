@@ -39,7 +39,7 @@ final class PostController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Post $parent)
+    public function store(Request $request, Post $parent, NewPost $action): JsonResponse
     {
         $validated = $request->validate([
             'body' => ['required', 'string', 'min:5', 'max:1000'],
@@ -48,7 +48,7 @@ final class PostController
         ]);
 
         $user = type($request->user())->as(User::class);
-        $post = (new NewPost($user, $validated, $parent))->handle();
+        $post = $action->handle($user, $validated, $parent);
 
         return response()->json([
             'data' => PostResource::make($post),
@@ -58,7 +58,7 @@ final class PostController
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Post $post): JsonResponse
     {
         $post->load(['user:id,first_name,last_name,username,avatar', 'images', 'parent:id,user_id', 'parent.user:id,first_name,last_name,username,avatar']);
         $post->loadCount(['likes', 'posts']);
@@ -71,7 +71,7 @@ final class PostController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Post $post): JsonResponse
     {
         Gate::authorize('update', $post);
 
@@ -94,7 +94,7 @@ final class PostController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, Post $post)
+    public function destroy(Request $request, Post $post): JsonResponse
     {
         Gate::authorize('delete', $post);
 

@@ -4,70 +4,65 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Contracts\NewModelAction;
 use App\Models\Image;
 use App\Models\Post;
 use App\Models\User;
 
-final class NewPost implements NewModelAction
+final class NewPost
 {
     private Post $post;
 
-    public function __construct(
-        private User $user,
-        private array $attributes,
-        private Post $parent,
-    ) {
-        //
-    }
+    public function handle(
+        User $user,
+        array $attributes,
+        ?Post $parent = null,
+    ): Post {
+        $this->create($user, $attributes, $parent);
 
-    public function handle(): Post
-    {
-        $this->create();
+        $this->setParent($parent);
 
-        $this->setParent();
-
-        $this->addImages();
+        $this->addImages($attributes);
 
         return $this->post;
     }
 
-    private function create(): void
+    private function create(User $user, array $attributes, ?Post $parent): Post
     {
-        $this->post = $this
-            ->user
+        $this->post = $user
             ->posts()
             ->create([
-                'parent_id' => $this->parent?->id,
-                'body' => $this->attributes['body'],
+                'parent_id' => $parent?->id,
+                'body' => $attributes['body'],
             ]);
 
-        $this->post->setRelation('user', $this->user);
+        $this->post->setRelation('user', $user);
+
+        return $this->post;
     }
 
-    private function setParent(): void
+    private function setParent(?Post $parent): void
     {
-        if (is_null($this->parent)) {
+        if (is_null($parent)) {
             return;
         }
 
-        $this->parent->load('user');
-        $this->post->setRelation('parent', $this->parent);
+        $parent->load('user');
+        $this->post->setRelation('parent', $parent);
     }
 
-    private function addImages(): void
+    private function addImages(array $attributes): void
     {
-        if (! array_key_exists('images', $this->attributes)) {
+        if (! array_key_exists('images', $attributes)) {
             return;
         }
 
-        $images = Image::whereIn('id', $this->attributes['images'])->get(['path', 'size']);
+        $images = Image::whereIn('id', $attributes['images'])->get(['path', 'size']);
 
         $postImages = $this->post
             ->images()
             ->createMany($images->toArray());
 
-        $images = Image::whereIn('id', $this->attributes['images'])->delete();
+        $images = Image::whereIn('id', $attributes['images'])->delete();
 
         $this->post->setRelation('images', $postImages);
     }
