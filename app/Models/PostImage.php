@@ -19,6 +19,20 @@ use Illuminate\Support\Facades\Storage;
  * @method static \Illuminate\Database\Eloquent\Builder|PostImage newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PostImage query()
  *
+ * @property string $id
+ * @property int $post_id
+ * @property string $path
+ * @property int $size
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|PostImage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostImage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostImage wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostImage wherePostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostImage whereSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PostImage whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 final class PostImage extends Model

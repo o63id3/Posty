@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Post;
+use App\Models\User;
 
 it('can load single post', function () {
     // setup the world
@@ -100,5 +101,19 @@ it('cannot load the posts index for guest', function () {
     $response = guest()
         ->get(route('posts.show', $post))
         ->assertStatus(401)
+        ->assertJsonMissing(['data']);
+});
+
+it('cannot load the post if the owner is blocker', function () {
+    // setup the world
+    $user = User::factory()->create();
+    $blocker = User::factory()->create();
+    $blocker->blocking()->attach($user);
+    $post = Post::factory()->recycle($blocker)->create();
+
+    // hit the show route
+    login($user)
+        ->get(route('posts.show', $post))
+        ->assertNotFound()
         ->assertJsonMissing(['data']);
 });

@@ -9,6 +9,7 @@ arch('globals')
 arch('http helpers')
     ->expect(['session', 'auth', 'request'])
     ->toOnlyBeUsedIn([
+        'App\Providers\AppServiceProvider',
         'App\Http',
         'App\Rules',
         'App\Livewire',

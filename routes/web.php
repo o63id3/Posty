@@ -8,6 +8,7 @@ use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\PostImageController;
 use App\Http\Controllers\Post\PostLikeController;
 use App\Http\Controllers\User\UserAvatarController;
+use App\Http\Controllers\User\UserBlockingController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserFollowerController;
 use App\Http\Controllers\User\UserFollowingsController;
@@ -50,6 +51,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/followers', [UserFollowerController::class, 'index'])->name('followers.index');
 
     Route::get('/followings', [UserFollowingsController::class, 'index'])->name('following.index');
+
+    Route::get('/blocking', [UserBlockingController::class, 'index'])->name('blocking.index');
+    Route::post('/{user:username}/block', [UserBlockingController::class, 'store'])->name('blocking.store');
+    Route::delete('/{user:username}/block', [UserBlockingController::class, 'destroy'])->name('blocking.destroy');
 });
 
 Route::prefix('posts')

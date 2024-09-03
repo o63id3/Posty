@@ -48,3 +48,16 @@ it('cannot show basic user info for guest', function () {
         ->assertStatus(401)
         ->assertJsonMissing(['data']);
 });
+
+it('cannot load the user if the owner is blocker', function () {
+    // setup the world
+    $user = User::factory()->create();
+    $blocker = User::factory()->create();
+    $blocker->blocking()->attach($user);
+
+    // hit the show route
+    login($user)
+        ->get(route('users.show', $blocker))
+        ->assertNotFound()
+        ->assertJsonMissing(['data']);
+});

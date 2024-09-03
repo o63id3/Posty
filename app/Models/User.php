@@ -57,6 +57,14 @@ use Illuminate\Support\Facades\Storage;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  *
+ * @property string|null $avatar
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $blockers
+ * @property-read int|null $blockers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $blocking
+ * @property-read int|null $blocking_count
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatar($value)
+ *
  * @mixin \Eloquent
  */
 final class User extends Authenticatable
@@ -151,6 +159,22 @@ final class User extends Authenticatable
     public function getAvatarUrlAttribute(): string
     {
         return $this->avatar ? Storage::disk('public')->url($this->avatar) : asset('img/default-avatar.png');
+    }
+
+    /**
+     * Get the user's blocking list.
+     */
+    public function blocking(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'blocks', 'blocker_id', 'user_id');
+    }
+
+    /**
+     * Get the user's blockers list.
+     */
+    public function blockers(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'blocks', 'user_id', 'blocker_id');
     }
 
     /**

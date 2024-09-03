@@ -84,3 +84,27 @@ test('custom avatar url', function () {
     expect($user->avatar)->toBe('avatars/123.png')
         ->and($user->avatar_url)->toBe(Storage::disk('public')->url('avatars/123.png'));
 });
+
+test('blocking', function () {
+    $user = User::factory()->create();
+    $target = User::factory()->create();
+
+    $user->blocking()->attach($target->id);
+
+    expect($user->blocking()->count())
+        ->toBe(1)
+        ->and($user->blocking()->first()->id)
+        ->toBe($target->id);
+});
+
+test('blockers', function () {
+    $user = User::factory()->create();
+    $target = User::factory()->create();
+
+    $user->blockers()->attach($target->id);
+
+    expect($user->blockers()->count())
+        ->toBe(1)
+        ->and($user->blockers()->first()->id)
+        ->toBe($target->id);
+});
