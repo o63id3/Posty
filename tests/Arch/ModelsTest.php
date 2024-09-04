@@ -10,6 +10,7 @@ arch('models')
     ->ignoring('App\Models\Concerns')
     ->toOnlyBeUsedIn([
         'App\Actions',
+        'App\Scopes',
         'App\Concerns',
         'App\Console',
         'App\EventActions',

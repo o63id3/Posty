@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Scopes\NonBlockerUsersScope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -175,6 +177,14 @@ final class User extends Authenticatable
     public function blockers(): BelongsToMany
     {
         return $this->belongsToMany(self::class, 'blocks', 'user_id', 'blocker_id');
+    }
+
+    /**
+     * Perform any actions required after the model boots.
+     */
+    protected static function booted(): void
+    {
+        self::addGlobalScope(new NonBlockerUsersScope());
     }
 
     /**

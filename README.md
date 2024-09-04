@@ -16,6 +16,7 @@ Posty is a social media application built with Laravel.
 - **Authentication**: Register, login, and logout.
 - **Posts**: Create, update, delete, and post on posts.
 - **Follow system**: Follow others, and others can follow you.
+- **Block system**: Block, and unblock others.
 - **Profile management**: update your name, username, email, and avatar.
 
 ## Installation
