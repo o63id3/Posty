@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Models\Like;
 use App\Models\Post;
+use App\Models\User;
 
 it('can load the post likes', function () {
     // setup the world
@@ -33,6 +35,21 @@ it('can load the post likes', function () {
                 'nextPageUrl',
             ],
         ]);
+});
+
+it('cannot load blockers likes', function () {
+    // setup the world
+    $user = User::factory()->create();
+    $blocker = User::factory()->create();
+    $blocker->blocking()->attach($user);
+    $post = Post::factory()->create();
+    Like::factory()->recycle($post)->recycle($blocker)->create();
+
+    // hit the index route
+    login($user)
+        ->get(route('post.posts.index', $post))
+        ->assertOk()
+        ->assertJsonCount(0, 'data');
 });
 
 it('cannot load the post likes guest', function () {

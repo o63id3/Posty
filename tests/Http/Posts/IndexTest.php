@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Post;
+use App\Models\User;
 
 it('can load the posts index', function () {
     // setup the world
@@ -45,6 +46,20 @@ it('can load the posts index', function () {
                 'nextPageUrl',
             ],
         ]);
+});
+
+it('cannot load blockers posts', function () {
+    // setup the world
+    $user = User::factory()->create();
+    $blocker = User::factory()->create();
+    $blocker->blocking()->attach($user);
+    Post::factory()->recycle($blocker)->create();
+
+    // hit the index route
+    login($user)
+        ->get(route('posts.index'))
+        ->assertOk()
+        ->assertJsonCount(0, 'data');
 });
 
 it('cannot load the posts index for guest', function () {

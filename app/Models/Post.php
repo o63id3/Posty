@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Scopes\NonBlockerUsersPostsScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -107,5 +108,13 @@ final class Post extends Model
     public function images(): HasMany
     {
         return $this->hasMany(PostImage::class);
+    }
+
+    /**
+     * Perform any actions required after the model boots.
+     */
+    protected static function booted(): void
+    {
+        self::addGlobalScope(new NonBlockerUsersPostsScope());
     }
 }
